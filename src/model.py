@@ -11,16 +11,20 @@ class Model:
     def print_test():
         print("Model object confirmed callable!")
     
+    #Calling this to retrieve and submit huggingface credentials saved in .env
     def log_into_hf():
         load_dotenv()
         token = os.getenv('HF_TOKEN')
         assert token, "Environment variable 'token' is not set"
         login(token)
     
+    #Loads the tokenizer associated with the selected hf model
     def load_tokenizer(model_name: str):
         tokenizer = AutoTokenizer.from_pretrained(model_name)
         tokenizer.pad_token = tokenizer.eos_token
+        return tokenizer
     
+    #Loads the hf model, applying lora-finetuned attention heads if passed via args
     def load_model(model_name: str, tokenizer: AutoTokenizer, model_hyperparams: dict = {}, adapter_dir: str = ""):
         model = None
         if adapter_dir == "":
